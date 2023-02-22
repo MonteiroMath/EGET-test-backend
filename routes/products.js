@@ -5,6 +5,8 @@ const {
   getProducts,
   createProduct,
   getProduct,
+  updateProduct,
+  deleteProduct,
 } = require("../controllers/products");
 
 router.get("/", getProducts);
@@ -13,15 +15,8 @@ router.post("/", createProduct);
 
 router.get("/:id", getProduct);
 
-router.put("/:id", function (req, res, next) {
-  //alters a specific product of id :id
-  res.json("");
-});
+router.put("/:id", updateProduct);
 
-router.delete("/:id", function (req, res, next) {
-  //deletels a specific product of id :id
-
-  res.json("");
-});
+router.delete("/:id", deleteProduct);
 
 module.exports = router;
