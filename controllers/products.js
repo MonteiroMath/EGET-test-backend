@@ -24,6 +24,8 @@ const getProduct = (req, res, next) => {
 
   Products.findByPk(id)
     .then((product) => {
+      if (!product) throw new Error(`Product id ${id} not found`);
+
       res.json({
         success: true,
         product,
@@ -32,7 +34,7 @@ const getProduct = (req, res, next) => {
     .catch(next);
 };
 
-const updateProduct = (req, res) => {
+const updateProduct = (req, res, next) => {
   const { id } = req.params;
   const { name, category, description, price, quantity } = req.body;
 
