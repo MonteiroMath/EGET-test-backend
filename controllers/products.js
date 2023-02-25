@@ -1,9 +1,36 @@
+const { Op } = require("sequelize");
 const Products = require("../models/products");
 
 const getProducts = (req, res, next) => {
   //return a list of all products or of those that satisfy the query
+  const query = req.query;
+  console.log(query);
+
+  if (query.searchTerm) {
+    next();
+  }
 
   Products.findAll()
+    .then((products) => res.json({ success: true, products }))
+    .catch(next);
+};
+
+const getProductsByQuery = (req, res, next) => {
+  //return a list of all products or of those that satisfy the query
+  const query = req.query;
+
+  if (!query.searchTerm) {
+    next();
+  }
+
+  Products.findAll({
+    where: {
+      [Op.or]: [
+        { name: { [Op.substring]: query.searchTerm } },
+        { category: { [Op.substring]: query.searchTerm } },
+      ],
+    },
+  })
     .then((products) => res.json({ success: true, products }))
     .catch(next);
 };
@@ -59,6 +86,7 @@ const deleteProduct = (req, res, next) => {
 
 module.exports = {
   getProducts,
+  getProductsByQuery,
   createProduct,
   getProduct,
   updateProduct,

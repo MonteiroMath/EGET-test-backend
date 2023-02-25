@@ -3,13 +3,14 @@ var router = express.Router();
 
 const {
   getProducts,
+  getProductsByQuery,
   createProduct,
   getProduct,
   updateProduct,
   deleteProduct,
 } = require("../controllers/products");
 
-router.get("/", getProducts);
+router.get("/", getProductsByQuery, getProducts);
 
 router.post("/", createProduct);
 
