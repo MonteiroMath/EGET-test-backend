@@ -19,15 +19,20 @@ const getProductsByQuery = (req, res, next) => {
   //return a list of all products or of those that satisfy the query
   const query = req.query;
 
-  if (!query.searchTerm) {
-    next();
+  console.log(query);
+  if (Object.keys(query).length == 0) {
+    return next();
   }
+
+  const { name, cat, min, max } = query;
 
   Products.findAll({
     where: {
-      [Op.or]: [
-        { name: { [Op.substring]: query.searchTerm } },
-        { category: { [Op.substring]: query.searchTerm } },
+      [Op.and]: [
+        name && { name: { [Op.substring]: name } },
+        cat && { category: { [Op.substring]: cat } },
+        min && { price: { [Op.gte]: parseFloat(min) } },
+        max && { price: { [Op.lte]: parseFloat(max) } },
       ],
     },
   })
