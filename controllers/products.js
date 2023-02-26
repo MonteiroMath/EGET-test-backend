@@ -4,7 +4,6 @@ const Products = require("../models/products");
 const getProducts = (req, res, next) => {
   //return a list of all products or of those that satisfy the query
   const query = req.query;
-  console.log(query);
 
   if (query.searchTerm) {
     next();
@@ -19,7 +18,6 @@ const getProductsByQuery = (req, res, next) => {
   //return a list of all products or of those that satisfy the query
   const query = req.query;
 
-  console.log(query);
   if (Object.keys(query).length == 0) {
     return next();
   }
@@ -41,12 +39,12 @@ const getProductsByQuery = (req, res, next) => {
 };
 
 const createProduct = (req, res, next) => {
-  const { name, category, description, price, quantity } = req.body;
+  const { name, category, description, price, quantity, image } = req.body;
 
-  if (!name || !category || !description || !price || !quantity)
+  if (!name || !category || !description || !price || !quantity || !image)
     throw new Error("Invalid request - Product data must be informed");
 
-  Products.create({ name, category, description, price, quantity })
+  Products.create({ name, category, description, price, quantity, image })
     .then((product) => res.json({ success: true, product }))
     .catch(next);
 };
@@ -85,7 +83,7 @@ const deleteProduct = (req, res, next) => {
 
   Products.findByPk(id)
     .then((product) => product.destroy())
-    .then(res.json({ success: true }))
+    .then(res.json({ success: true, productId: id }))
     .catch(next);
 };
 
