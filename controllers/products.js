@@ -66,11 +66,11 @@ const getProduct = (req, res, next) => {
 
 const updateProduct = (req, res, next) => {
   const { id } = req.params;
-  const { name, category, description, price, quantity } = req.body;
+  const { name, category, description, price, quantity, image } = req.body;
 
   Products.findByPk(id)
     .then((product) => {
-      product.set({ name, category, description, quantity, price });
+      product.set({ name, category, description, quantity, price, image });
 
       return product.save();
     })
